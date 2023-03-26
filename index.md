@@ -1,5 +1,3 @@
-Here you can say lots of fun things about your site.
+Just Coding with Jie. 
 
-Maybe say a some things about yourself.
-
-Or maybe what you plan to blog about.
+This is a programming tech space for JZ0815.
