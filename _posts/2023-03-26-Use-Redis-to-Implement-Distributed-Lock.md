@@ -27,7 +27,14 @@ The fifth parameter is time, represent the expiration time for the fourth parame
 
 Notice: We need to add an expiration time to avoid deadlock.  Use UUID to guarantee when deleting a key, it will below to the request. The keys belonging to other requests will not be deleted.
 
+Here we can set a MAX_RETRY_TIME, and if a request doesn't acquire the key, it will keep retry until reach the max retry times.
+
+In the tryGetLock implementations, notice to use try, catch, finally to close the jedisClient.
 #### To Release a Lock
+
+We need to get the value from the key and compare if this the same as requestId. If the value equals to requestId, then the key is removed (release the lock). The reason to use Lua script is to guarantee the atomic property for get the requestId, compare if requestId equals to the value and remove the key.
+
+Jedis eval() method is used to execute Lua script. The Lua script is treated as one command. And only after the one command is executed, redis can do other works.
 
 #### The following is Sample Java Code to Lock or Release Distributed Lock
 
@@ -88,4 +95,20 @@ public class RedisLock {
     }
 }
 ```
+#### To Use Redis Distributed Lock
+
+We also should write use try, catch, finally blocks.
+```java
+if (lockAcquired) {
+    try {
+        // do work 
+        } catch (Exception ex) {
+        //...
+        } finally {
+        // release lock
+        }
+}
+```
+
+We should release the lock once there is exception throw.
 
