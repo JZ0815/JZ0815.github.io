@@ -1,7 +1,7 @@
 ## Setup High Available Kubernetes Cluster Using Kubeadm
 
 
-This is a home lab, I used vmware to set k8s cluster at my home computer for learning. I used 3 pc at home and I bridged the network. I placed 3 master nodes at 3 different pc for high avilablity.  Kubeadm is a tool which can help to build Kubernetes clusters. It facilitates the setup processes by the two command:
+This is a home lab, I used vmware to set k8s cluster at my home computer for learning. I used 3 pc at home and I bridged the network. I placed 3 master nodes at 3 different pc for high availablity.  Kubeadm is a tool which can help to build Kubernetes clusters. It facilitates the setup processes by the two command:
 
 kube init: used to create a master node.
 
