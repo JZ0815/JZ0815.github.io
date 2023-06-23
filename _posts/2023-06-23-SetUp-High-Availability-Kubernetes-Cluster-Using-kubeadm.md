@@ -212,6 +212,15 @@ Run the command systemctl restart network to restart the network
 
   EOF
 
+3. Start keeplived in all 3 masters, enable keepalived and check status,
+
+   systemctl start keepalived.service
+
+   systemctl enable keepalived.service
+
+   systemctl status keepalived.service
+
+
 
 
 
