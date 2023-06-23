@@ -147,7 +147,8 @@ Run the command systemctl restart network to restart the network
 
    yum install -y keepalived
 
-2. Configure all 3 master nodes, run the following scripts in all 3 masters, in my settings, my vip is 192.168.31.158. Use yours when you are setting the values.
+2. Configure all 3 master nodes, run the following scripts in all 3 masters, in my settings, my vip is 192.168.31.158. Use yours when you are setting the values. 
+
 
    cat > /etc/keepalived/keepalived.conf <<EOF
 
@@ -220,6 +221,107 @@ Run the command systemctl restart network to restart the network
 
    systemctl status keepalived.service
 
+#### Step Three, Setup Haproxy
+
+We can also use Nginx here. Haproxy and Nginx are both open source software used for load balancing, reverse proxying, and web serving. The main difference between the two is that Haproxy is a proxy server specifically designed to handle high levels of traffic while Nginx can be used as either a proxy or web server depending on configuration.
+
+1. Install Haproxy
+
+   yum install -y haproxy
+
+2. Configuration Haproxy, let's use port 16443 here. Run the following scripts in all 3 master nodes. Notice to put your own master ip here.
+
+
+   cat > /etc/haproxy/haproxy.cfg << EOF
+
+   global
+
+   log         127.0.0.1 local2
+
+     chroot      /var/lib/haproxy
+
+     pidfile     /var/run/haproxy.pid
+
+     maxconn     4000
+
+     user        haproxy
+
+     group       haproxy
+
+     daemon 
+
+
+    stats socket /var/lib/haproxy/stats
+
+    defaults
+
+    mode                    http
+
+    log                     global
+
+    option                  httplog
+
+    option                  dontlognull
+
+    option http-server-close
+
+    option forwardfor       except 127.0.0.0/8
+
+   option                  redispatch
+
+   retries                 3
+
+   timeout http-request    10s
+
+   timeout queue           1m
+
+   timeout connect         10s
+
+   timeout client          1m
+
+   timeout server          1m
+
+   timeout http-keep-alive 10s
+
+   timeout check           10s
+
+   maxconn                 3000
+
+   frontend kubernetes-apiserver
+
+   mode                 tcp
+
+   bind                 *:16443
+
+   option               tcplog
+
+   default_backend      kubernetes-apiserver
+
+   backend kubernetes-apiserver
+
+   mode        tcp
+
+   balance     roundrobin
+
+   server      master01.k8s.io   192.168.31.137:6443 check
+
+   server      master02.k8s.io   192.168.31.190:6443 check
+
+   server      master03.k8s.io   192.168.31.172:6443 check
+
+  listen stats
+
+  bind                 *:1080
+
+  stats auth           admin:awesomePassword
+
+  stats refresh        5s
+
+  stats realm          HAProxy\ Statistics
+
+  stats uri            /admin?stats
+
+EOF
 
 
 
