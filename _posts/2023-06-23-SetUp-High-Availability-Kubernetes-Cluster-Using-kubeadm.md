@@ -457,6 +457,84 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
   kubectl get pods -n kube-system
 
+#### Step Six, Install CNI network plugin
+
+We can install flannel or Calico. I installed flannel here.
+
+mkdir flannel
+
+cd flannel
+
+wget -c https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+apply flannel network
+
+kubectl apply -f kube-flannel.yml 
+
+#### Step Seven, Setup Master2 and Master3
+
+1. Copy certificates from Master1 to Master2 and Master3.  These command runs at Master1. 
+
+ssh root@192.168.31.190 mkdir -p /etc/kubernetes/pki/etcd
+
+scp /etc/kubernetes/admin.conf root@192.168.31.190:/etc/kubernetes
+
+scp /etc/kubernetes/pki/{ca.*,sa.*,front-proxy-ca.*} root@192.168.31.190:/etc/kubernetes/pki
+
+scp /etc/kubernetes/pki/etcd/ca.* root@192.168.31.190:/etc/kubernetes/pki/etcd
+
+
+
+ssh root@192.168.31.172 mkdir -p /etc/kubernetes/pki/etcd
+
+scp /etc/kubernetes/admin.conf root@192.168.31.172:/etc/kubernetes
+
+scp /etc/kubernetes/pki/{ca.*,sa.*,front-proxy-ca.*} root@192.168.31.172:/etc/kubernetes/pki
+
+scp /etc/kubernetes/pki/etcd/ca.* root@192.168.31.172:/etc/kubernetes/pki/etcd
+
+2. Join master2 and master3
+
+At master2 and master3 run the following command.
+
+
+kubeadm join master.k8s.io:16443 --token t5758l.eca947obnf3hpred --discovery-token-ca-cert-hash sha256:5e54df6d4cf92d13241f483074dcd7a5fe21e55ac8cfcc17b932b5ed2079d9b7 --control-plane 
+
+These command are copied from the picture I pasted above.   --control-plane  means we added master nodes.
+
+#### Step Eight, Setup Node1, Nod2, Node3 and Node4
+
+1. At the four worker nodes, run the command:
+
+
+kubeadm join master.k8s.io:16443 --token t5758l.eca947obnf3hpred --discovery-token-ca-cert-hash sha256:5e54df6d4cf92d13241f483074dcd7a5fe21e55ac8cfcc17b932b5ed2079d9b7
+
+Notice this command is the same as we add a master node except there is no --control-plan parameters here.
+
+2. After joined the four worker nodes, apply flannel network again
+
+kubectl apply -f kube-flannel.yml 
+
+Now we have set up our high availability kubernetes cluster. We can check the status by running kubectl get nodes in master nodes
+
+![High Available Kubernetes Cluster](https://github.com/JZ0815/JZ0815.github.io/blob/main/images/k8s-cluster.png?raw=true)
+
+3. Validate our setup
+
+We can deploy a Nginx pod to validate the installations
+
+kubectl create deployment nginx --image=nginx
+
+kubectl expose deployment nginx --port=80 --target-port=80 --type=NodePort
+
+kubectl get pod,svc
+
+Congratulations, we set up a high availability kubernetes cluster. Technologies such as virtual ip, load balanceing (haproxy) are envolved. 
+
+
+
+
+
 
 
 
