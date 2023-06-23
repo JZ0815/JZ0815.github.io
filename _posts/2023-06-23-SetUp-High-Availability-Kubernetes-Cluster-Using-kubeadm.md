@@ -123,7 +123,94 @@ Run the command systemctl restart network to restart the network
    192.168.31.109    node04.k8s.io   node4
 
    EOF
+7. Update iptables
 
+   cat > /etc/sysctl.d/k8s.conf << EOF
+
+   net.bridge.bridge-nf-call-ip6tables = 1
+
+   net.bridge.bridge-nf-call-iptables = 1
+
+   EOF
+
+   sysctl --system 
+8. Sync time in all master and worker nodes:
+   
+   yum install ntpdate -y
+
+   ntpdate time.windows.com
+
+#### Step Two, Intall keepalived in all Master Nodes
+1. Install keeplived package in all 3 master nodes
+
+   yum install -y conntrack-tools libseccomp libtool-ltdl
+
+   yum install -y keepalived
+
+2. Configure all 3 master nodes, run the following scripts in all 3 masters, in my settings, my vip is 192.168.31.158. Use yours when you are setting the values.
+
+   cat > /etc/keepalived/keepalived.conf <<EOF
+
+   ! Configuration File for keepalived
+
+
+   global_defs {
+
+     router_id k8s
+
+   }
+
+
+   vrrp_script check_haproxy {
+
+     script "killall -0 haproxy"
+
+     interval 3
+
+     weight -2
+
+     fall 10
+
+     rise 2
+
+  }
+
+
+  vrrp_instance VI_1 {
+
+    state MASTER
+
+    interface ens33
+
+    virtual_router_id 51
+
+    priority 250
+
+    advert_int 1
+
+    authentication {
+
+    auth_type PASS
+
+    auth_pass ceb1b3ec013d66163d6ab
+
+  }
+
+  virtual_ipaddress {
+
+    192.168.31.158
+
+  }
+
+  track_script {
+
+    check_haproxy
+
+   }
+
+  }
+
+  EOF
 
 
 
