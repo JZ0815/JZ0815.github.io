@@ -365,6 +365,85 @@ EOF
 
    systemctl enable kubelet
 
+#### Step Five, Set up First Master Node
+
+We need to set up on the master node which has vip. We can use the command
+
+ip a s ens33
+
+to  check which master node has vip.
+
+For instance, my vip is at 192.168.31.137 (master1). So I ran the following scripts under master1.
+
+mkdir /usr/local/kubernetes/manifests -p
+
+cd /usr/local/kubernetes/manifests/
+
+vi kubeadm-config.yaml
+
+apiServer:
+
+certSANs:
+
+ - master1
+ - master2
+ - master3
+ - master.k8s.io
+ - 192.168.31.158
+ - 192.168.31.137
+ - 192.168.31.190
+ - 192.168.31.172
+ - 127.0.0.1
+
+  extraArgs:
+
+  authorization-mode: Node,RBAC
+
+  timeoutForControlPlane: 4m0s
+
+  apiVersion: kubeadm.k8s.io/v1be3
+
+  certificatesDir: /etc/kubernetes/pki
+
+  clusterName: kubernetes
+
+  controlPlaneEndpoint: "master.k8s.io:16443"
+
+  controllerManager: {}
+
+  etcd:
+
+  local:
+
+  dataDir: /var/lib/etcd
+
+  imageRepository: "registry.k8s.io"
+
+  kind: ClusterConfiguration
+
+  kubernetesVersion: v1.27.3
+
+  networking:
+
+  dnsDomain: cluster.local
+
+  podSubnet: 10.244.0.0/16
+
+  serviceSubnet: 10.1.0.0/16 
+
+  scheduler: {}
+
+Notice to check your k8s version and use your own, also put your own value at certSANs, also the latest k8s apiVersion should be match, I used kubeadm.k8s.io/v1be3 here.
+
+  Now, congratulations! We are able to init our master1 by running the following command at master1:
+
+  kubeadm init --config kubeadm-config.yaml
+
+  After running the the command, we will see screen like below.
+
+![High Available Kubernetes Cluster](https://github.com/JZ0815/JZ0815.github.io/blob/main/images/k8s-master1.png?raw=true)
+
+
 
 
 
