@@ -353,7 +353,7 @@ EOF
 
    mkdir -p /etc/containerd
 
-   containerd config default | sudo tee /etc/containerd/config.toml
+   containerd config default| sudo tee /etc/containerd/config.toml
 
    systemctl enable containerd
 
@@ -362,6 +362,7 @@ EOF
 3. Install kubeadm, kubelet and kubectl
 
    yum install -y kubelet kubeadm  kubectl
+
    systemctl enable kubelet
 
 
