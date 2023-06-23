@@ -473,7 +473,7 @@ kubectl apply -f kube-flannel.yml
 
 #### Step Seven, Setup Master2 and Master3
 
-1. Copy certificates from Master1 to Master2 and Master3.  These command runs at Master1. 
+1 . Copy certificates from Master1 to Master2 and Master3.  These command runs at Master1. 
 
 ssh root@192.168.31.190 mkdir -p /etc/kubernetes/pki/etcd
 
@@ -493,7 +493,7 @@ scp /etc/kubernetes/pki/{ca.*,sa.*,front-proxy-ca.*} root@192.168.31.172:/etc/ku
 
 scp /etc/kubernetes/pki/etcd/ca.* root@192.168.31.172:/etc/kubernetes/pki/etcd
 
-2. Join master2 and master3
+2 . Join master2 and master3
 
 At master2 and master3 run the following command.
 
@@ -504,14 +504,14 @@ These command are copied from the picture I pasted above.   --control-plane  mea
 
 #### Step Eight, Setup Node1, Nod2, Node3 and Node4
 
-1. At the four worker nodes, run the command:
+1 . At the four worker nodes, run the command:
 
 
 kubeadm join master.k8s.io:16443 --token t5758l.eca947obnf3hpred --discovery-token-ca-cert-hash sha256:5e54df6d4cf92d13241f483074dcd7a5fe21e55ac8cfcc17b932b5ed2079d9b7
 
 Notice this command is the same as we add a master node except there is no --control-plan parameters here.
 
-2. After joined the four worker nodes, apply flannel network again
+2 . After joined the four worker nodes, apply flannel network again
 
 kubectl apply -f kube-flannel.yml 
 
@@ -519,7 +519,7 @@ Now we have set up our high availability kubernetes cluster. We can check the st
 
 ![High Available Kubernetes Cluster](https://github.com/JZ0815/JZ0815.github.io/blob/main/images/k8s-cluster.png?raw=true)
 
-3. Validate our setup
+3 . Validate our setup
 
 We can deploy a Nginx pod to validate the installations
 
