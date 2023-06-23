@@ -323,6 +323,47 @@ We can also use Nginx here. Haproxy and Nginx are both open source software used
 
 EOF
 
+3. Enable and Start Haproxy
+
+   systemctl enable haproxy
+
+   systemctl start haproxy
+
+   systemctl status haproxy
+
+
+#### Step Four, Install Docker/Containerd/Kubeadm/Kubelet at all Nodes
+1. Install Docker (Notice Kubernetes has abandoned and in the latest version, we should install containerd, so step 1 is optional for latest k8s version).
+
+  yum install -y yum-utils device-mapper-persistent-data lvm2
+
+  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+  yum install docker
+
+  systemctl start docker
+
+  systemctl enable docker
+
+2. Install Containerd
+
+   yum install -y yum-utils
+
+   yum install -y containerd.io
+
+   mkdir -p /etc/containerd
+
+   containerd config default | sudo tee /etc/containerd/config.toml
+
+   systemctl enable containerd
+
+   systemctl restart containerd
+
+3. Install kubeadm, kubelet and kubectl
+
+   yum install -y kubelet kubeadm  kubectl
+   systemctl enable kubelet
+
 
 
 
