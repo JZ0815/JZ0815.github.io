@@ -123,6 +123,7 @@ Run the command systemctl restart network to restart the network
    192.168.31.109    node04.k8s.io   node4
 
    EOF
+
 7 . Update iptables
 
    cat > /etc/sysctl.d/k8s.conf << EOF
