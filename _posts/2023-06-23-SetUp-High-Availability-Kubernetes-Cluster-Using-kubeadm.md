@@ -345,7 +345,7 @@ EOF
 
   systemctl enable docker
 
-2. Install Containerd
+2 . Install Containerd
 
    yum install -y yum-utils
 
@@ -353,7 +353,7 @@ EOF
 
    mkdir -p /etc/containerd
 
-   containerd config default| sudo tee /etc/containerd/config.toml
+   containerd config default|sudo tee /etc/containerd/config.toml
 
    systemctl enable containerd
 
