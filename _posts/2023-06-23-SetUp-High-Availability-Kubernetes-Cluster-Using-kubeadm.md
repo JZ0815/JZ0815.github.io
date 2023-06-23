@@ -443,6 +443,20 @@ Notice to check your k8s version and use your own, also put your own value at ce
 
 ![High Available Kubernetes Cluster](https://github.com/JZ0815/JZ0815.github.io/blob/main/images/k8s-master1.png?raw=true)
 
+  Run the command in the above picture from master1.
+
+mkdir -p $HOME/.kube
+
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+  After running, we can check the status by the following command.
+
+  kubectl get nodes
+
+  kubectl get pods -n kube-system
+
 
 
 
