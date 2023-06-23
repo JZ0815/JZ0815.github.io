@@ -12,7 +12,7 @@ Before I build my cluster, I prepared 7 virtual machines with CentOS 7 installed
 
 The final goal of our setup is like the following picture:
 
-![High Available Kubernetes Cluster](https://github.com/JZ0815/JZ0815.github.io/blob/main/images/myk8s.png)
+![High Available Kubernetes Cluster](https://github.com/JZ0815/JZ0815.github.io/blob/main/images/myk8s.png?raw=true)
 
 Here I have my master and worker nodes ip and host name below, if you are following my steps, please use ifconfig command to get your own ip.
 
