@@ -529,7 +529,7 @@ kubectl expose deployment nginx --port=80 --target-port=80 --type=NodePort
 
 kubectl get pod,svc
 
-Congratulations, we set up a high availability kubernetes cluster. Technologies such as virtual ip, load balanceing (haproxy) are envolved. 
+Congratulations, we set up a high availability kubernetes cluster. Technologies such as virtual ip, load balanceing (haproxy) are envolved. The process is challenging but paid off.
 
 
 
