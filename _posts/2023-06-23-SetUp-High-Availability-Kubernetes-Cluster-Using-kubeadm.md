@@ -333,7 +333,7 @@ EOF
 
 
 #### Step Four, Install Docker/Containerd/Kubeadm/Kubelet at all Nodes
-1. Install Docker (Notice Kubernetes has abandoned and in the latest version, we should install containerd, so step 1 is optional for latest k8s version).
+1. Install Docker (Notice Kubernetes has abandoned docker in the latest version, we should install containerd, so step 1 is optional for latest k8s version).
 
   yum install -y yum-utils device-mapper-persistent-data lvm2
 
