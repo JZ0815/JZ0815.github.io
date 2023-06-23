@@ -50,6 +50,81 @@ And I am going to use 192.168.31.158 as my virtual ip (in the middle box of the 
    swapoff -a  # temporary
 
    sed -ri 's/.*swap.*/#&/' /etc/fstab    # permanent
+4. Set Hostname for all vm
+   
+   hostnamectl set-hostname <hostname>
+
+   hostname
+
+5. We can also assign static ip to all vm, go to vi /etc/sysconfig/network-scripts/ and change the settings in ifcfg-ens33, below is a sample:
+
+   TYPE="Ethernet"
+
+   PROXY_METHOD="none"
+
+   BROWSER_ONLY="no"
+
+   BOOTPROTO="none"
+
+   IPADDR=XXX.XXX.XXX.XXX
+
+   PREFIX=24
+
+   GATEWAY=XXX.XXX.XXX.XXX
+
+   DNS1=192.168.31.137
+
+   DNS2=8.8.8.8
+
+   DNS3=8.8.4.4
+
+   DEFROUTE="yes"
+
+   IPV4_FAILURE_FATAL="no"
+
+   IPV6INIT="no"
+
+   IPV6_AUTOCONF="no"
+
+   IPV6_DEFROUTE="no"
+
+   IPV6_FAILURE_FATAL="no"
+
+   IPV6_ADDR_GEN_MODE="stable-privacy"
+
+   NAME="ens33"
+
+   UUID="Your respective network UUID"
+
+   DEVICE="ens33"
+
+   ONBOOT="yes"
+
+Run the command systemctl restart network to restart the network
+
+6. Edit /etc/hosts file in master nodes
+
+   cat >> /etc/hosts << EOF
+
+   192.168.31.158    master.k8s.io   k8s-vip
+
+   192.168.31.137    master01.k8s.io master1
+
+   192.168.31.190    master02.k8s.io master2
+
+   192.168.31.172    master03.k8s.io master3
+
+   192.168.31.110    node01.k8s.io   node1
+
+   192.168.31.148    node02.k8s.io   node2
+
+   192.168.31.114    node03.k8s.io   node3
+
+   192.168.31.109    node04.k8s.io   node4
+
+   EOF
+
+
 
 
 
