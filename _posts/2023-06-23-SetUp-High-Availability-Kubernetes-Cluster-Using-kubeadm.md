@@ -33,30 +33,30 @@ Here I have my master and worker nodes ip and host name below, if you are follow
 And I am going to use 192.168.31.158 as my virtual ip (in the middle box of the picture above).
 
 #### Step One, Server Preparations
-1. Turn Off firewall in all master and worker nodes
+1 . Turn Off firewall in all master and worker nodes
 
    systemctl stop firewalld
 
    systemctl disable firewalld
 
-2. Turn Off Selinux in all master and worker nodes
+2 . Turn Off Selinux in all master and worker nodes
 
    sed -i 's/enforcing/disabled/' /etc/selinux/config  # permanent
 
    setenforce 0  # temporary
 
-3. Turn Off swap in all master and worker nodes
+3 . Turn Off swap in all master and worker nodes
 
    swapoff -a  # temporary
 
    sed -ri 's/.*swap.*/#&/' /etc/fstab    # permanent
-4. Set Hostname for all vm
+4 . Set Hostname for all vm
    
    hostnamectl set-hostname <hostname>
 
    hostname
 
-5. We can also assign static ip to all vm, go to vi /etc/sysconfig/network-scripts/ and change the settings in ifcfg-ens33, below is a sample:
+5 . We can also assign static ip to all vm, go to vi /etc/sysconfig/network-scripts/ and change the settings in ifcfg-ens33, below is a sample:
 
    TYPE="Ethernet"
 
@@ -102,7 +102,7 @@ And I am going to use 192.168.31.158 as my virtual ip (in the middle box of the 
 
 Run the command systemctl restart network to restart the network
 
-6. Edit /etc/hosts file in master nodes
+6 . Edit /etc/hosts file in master nodes
 
    cat >> /etc/hosts << EOF
 
@@ -123,7 +123,7 @@ Run the command systemctl restart network to restart the network
    192.168.31.109    node04.k8s.io   node4
 
    EOF
-7. Update iptables
+7 . Update iptables
 
    cat > /etc/sysctl.d/k8s.conf << EOF
 
@@ -134,20 +134,20 @@ Run the command systemctl restart network to restart the network
    EOF
 
    sysctl --system 
-8. Sync time in all master and worker nodes:
+8 . Sync time in all master and worker nodes:
    
    yum install ntpdate -y
 
    ntpdate time.windows.com
 
 #### Step Two, Intall keepalived in all Master Nodes
-1. Install keeplived package in all 3 master nodes
+1 . Install keeplived package in all 3 master nodes
 
    yum install -y conntrack-tools libseccomp libtool-ltdl
 
    yum install -y keepalived
 
-2. Configure all 3 master nodes, run the following scripts in all 3 masters, in my settings, my vip is 192.168.31.158. Use yours when you are setting the values. 
+2 . Configure all 3 master nodes, run the following scripts in all 3 masters, in my settings, my vip is 192.168.31.158. Use yours when you are setting the values. 
 
 
    cat > /etc/keepalived/keepalived.conf <<EOF
@@ -213,7 +213,7 @@ Run the command systemctl restart network to restart the network
 
   EOF
 
-3. Start keeplived in all 3 masters, enable keepalived and check status,
+3 . Start keeplived in all 3 masters, enable keepalived and check status,
 
    systemctl start keepalived.service
 
@@ -225,11 +225,11 @@ Run the command systemctl restart network to restart the network
 
 We can also use Nginx here. Haproxy and Nginx are both open source software used for load balancing, reverse proxying, and web serving. The main difference between the two is that Haproxy is a proxy server specifically designed to handle high levels of traffic while Nginx can be used as either a proxy or web server depending on configuration.
 
-1. Install Haproxy
+1 . Install Haproxy
 
    yum install -y haproxy
 
-2. Configuration Haproxy, let's use port 16443 here. Run the following scripts in all 3 master nodes. Notice to put your own master ip here.
+2 . Configuration Haproxy, let's use port 16443 here. Run the following scripts in all 3 master nodes. Notice to put your own master ip here.
 
 
    cat > /etc/haproxy/haproxy.cfg << EOF
@@ -323,7 +323,7 @@ We can also use Nginx here. Haproxy and Nginx are both open source software used
 
 EOF
 
-3. Enable and Start Haproxy
+3 . Enable and Start Haproxy
 
    systemctl enable haproxy
 
@@ -359,7 +359,7 @@ EOF
 
    systemctl restart containerd
 
-3. Install kubeadm, kubelet and kubectl
+3 . Install kubeadm, kubelet and kubectl
 
    yum install -y kubelet kubeadm  kubectl
 
