@@ -50,6 +50,7 @@ And I am going to use 192.168.31.158 as my virtual ip (in the middle box of the 
    swapoff -a  # temporary
 
    sed -ri 's/.*swap.*/#&/' /etc/fstab    # permanent
+
 4 . Set Hostname for all vm
    
    hostnamectl set-hostname <hostname>
@@ -135,6 +136,7 @@ Run the command systemctl restart network to restart the network
    EOF
 
    sysctl --system 
+
 8 . Sync time in all master and worker nodes:
    
    yum install ntpdate -y
