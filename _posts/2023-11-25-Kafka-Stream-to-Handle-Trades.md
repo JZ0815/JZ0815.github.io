@@ -1,18 +1,18 @@
 ## Leveraging Kafka Streams to Efficiently Handle Trades
 
 
-###Introduction:
+### Introduction:
 
 In the ever-evolving landscape of financial technology, the efficient handling of trades is paramount. Kafka Streams, a powerful library for building real-time data processing applications, offers a robust solution for processing and analyzing trade data seamlessly. In this tutorial, we will explore the step-by-step implementation of a Kafka Streams application to handle trades effectively.
 
-###Prerequisites:
+### Prerequisites:
 
 Before diving into the implementation, ensure you have the following prerequisites:
 
 Apache Kafka installed and running.
 Basic understanding of Kafka concepts (topics, producers, consumers).
 Java development environment set up.
-####Step 1: Define the Trade Data Schema
+#### Step 1: Define the Trade Data Schema
 
 Start by defining the schema for your trade data. Consider essential attributes such as trade ID, symbol, quantity, price, and timestamp. Normally we get those trades using FIX format. FIX 4.4 is widely used. Ensure consistency in data types to facilitate smooth processing within Kafka Streams.  We can define our schema in Kafka as protobuf.
 ```
@@ -89,21 +89,21 @@ public class YourTradeProcessor {
 Kafka Streams introduces the concept of windowing to enable time-based processing of data streams. Windowing is a fundamental feature that allows developers to analyze and aggregate data over specific time intervals, providing insights into temporal patterns within the stream.
 
 
-####Time Windows:
+#### Time Windows:
 
 Kafka Streams supports various types of time windows, such as tumbling windows, hopping windows, and sliding windows. These windows define how the stream is divided and processed over time.
 Tumbling Windows:
 
-####Tumbling windows represent fixed, non-overlapping time intervals. All events within a specific window are processed together, providing a clear, non-overlapping view of data within each time frame.
+#### Tumbling windows represent fixed, non-overlapping time intervals. All events within a specific window are processed together, providing a clear, non-overlapping view of data within each time frame.
 Hopping Windows:
 
-####Hopping windows are similar to tumbling windows but allow for overlap. Events can belong to multiple windows, enabling more flexible analysis of data that spans multiple time intervals.
+#### Hopping windows are similar to tumbling windows but allow for overlap. Events can belong to multiple windows, enabling more flexible analysis of data that spans multiple time intervals.
 Sliding Windows:
 
-####Sliding windows offer a compromise between tumbling and hopping windows by allowing a specified amount of overlap between consecutive windows. This flexibility is useful for scenarios where continuous insights into evolving patterns are crucial.
+#### Sliding windows offer a compromise between tumbling and hopping windows by allowing a specified amount of overlap between consecutive windows. This flexibility is useful for scenarios where continuous insights into evolving patterns are crucial.
 Use Cases:
 
-####Real-time Aggregation:
+#### Real-time Aggregation:
 
 Windowing is instrumental for real-time aggregation of data. It enables the calculation of metrics, such as counts, sums, or averages, over specific time intervals, providing a dynamic and continuously updated view of streaming data.
 Temporal Pattern Analysis:
@@ -117,20 +117,20 @@ Example:
 Consider a streaming application that processes stock trade events. By applying windowing, the application can calculate the average trade volume every minute, providing insights into short-term trading trends. This real-time aggregation over time windows enables timely decision-making in financial scenarios.
 
 
-####Step 4: Test the Application
+#### Step 4: Test the Application
 
 Generate sample trade data and produce it to the input topic using a Kafka producer. Observe the real-time processing of trades as the Kafka Streams application runs. Monitor the output topic to ensure that the trades are processed as expected.
 
-####Step 5: Scaling and Optimization
+#### Step 5: Scaling and Optimization
 
 Explore opportunities for scaling your Kafka Streams application based on the volume of trade data. Consider partitioning strategies, optimization techniques, and deployment configurations to ensure the application's efficiency and resilience.
 
 
-###Differences between Kafka Streams and Other Frameworks
+### Differences between Kafka Streams and Other Frameworks
 
 In the following analysis, I will delve into the distinctions between Kafka Streams and other frameworks in four aspects: application deployment, upstream and downstream data sources, coordination methods, and semantic guarantees.
 
-####Application Deployment:
+#### Application Deployment:
 
 Starting with the deployment of streaming applications, Kafka Streams stands out due to its developer-centric approach. Developers are responsible for packaging and deploying Kafka Streams applications, whether as standalone JAR files or embedded within other Java applications. This approach grants flexibility but requires developers to manage the application lifecycle independently.
 
@@ -138,7 +138,7 @@ In contrast, other streaming platforms, such as Apache Flink, offer comprehensiv
 
 This stands in contrast to Kafka Streams, which tends to delegate deployment responsibilities to developers rather than implementing a self-sufficient framework.
 
-####Upstream and Downstream Data Sources:
+#### Upstream and Downstream Data Sources:
 
 Moving on to differences in connecting to upstream and downstream data sources, Kafka Streams currently supports reading and writing data exclusively from and to Kafka. Without the support of Kafka Connect components, Kafka Streams is limited to interacting with Kafka topics. Conversely, other streaming frameworks often offer broader connectivity options.
 
