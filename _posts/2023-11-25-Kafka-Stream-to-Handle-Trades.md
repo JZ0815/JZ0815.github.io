@@ -14,7 +14,28 @@ Basic understanding of Kafka concepts (topics, producers, consumers).
 Java development environment set up.
 #### Step 1: Define the Trade Data Schema
 
-Start by defining the schema for your trade data. Consider essential attributes such as trade ID, symbol, quantity, price, and timestamp. Normally we get those trades using FIX format. FIX 4.4 is widely used. Ensure consistency in data types to facilitate smooth processing within Kafka Streams.  We can define our schema in Kafka as protobuf.
+Start by defining the schema for your trade data. Consider essential attributes such as trade ID, symbol, quantity, price, and timestamp. Normally we get those trades using FIX format. FIX 4.4 is widely used. 
+A sample FIX message is like below.
+```
+8=FIX.4.4|35=D|34=1|49=SenderCompID|56=TargetCompID|11=ClOrdID123|54=1|55=AAPL|38=100|44=150.25|60=20231125-12:30:00|10=127|
+```
+
+In this example:
+
+8=FIX.4.4 indicates the FIX version.
+35=D indicates that it's a New Order - Single message.
+34=1 is the message sequence number.
+49=SenderCompID is the identifier of the sender's trading system.
+56=TargetCompID is the identifier of the target's trading system.
+11=ClOrdID123 is a unique identifier for the new order.
+54=1 indicates a buy order.
+55=AAPL is the symbol for Apple Inc.
+38=100 is the order quantity.
+44=150.25 is the order price.
+60=20231125-12:30:00 is the time the order was created.
+10=127 is the checksum.
+
+Ensure consistency in data types to facilitate smooth processing within Kafka Streams.  We can convert and define our schema in Kafka as protobuf.
 ```
 // trade.proto
 
@@ -22,10 +43,12 @@ syntax = "proto3";
 
 message Trade {
   string tradeId = 1;
-  string symbol = 2;
-  int32 quantity = 3;
-  double price = 4;
-  int64 timestamp = 5;
+  String senderCompId = 2;
+  String targetCompId = 3;
+  string symbol = 4;
+  int32 quantity = 5;
+  double price = 6;
+  int64 timestamp = 7;
 }
 
 
